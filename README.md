@@ -107,5 +107,9 @@ It returns a prediction (APPROVED / DECLINED) based on the trained model.
 This app can be deployed on AWS Elastic Beanstalk, Heroku, or similar platforms.
 
 
-<img width="905" height="400" alt="image" src="https://github.com/user-attachments/assets/8c54ea07-3feb-40a9-8d00-c67fd6eefc8c" />
+    <img width="905" height="400" alt="image" src="https://github.com/user-attachments/assets/8c54ea07-3feb-40a9-8d00-c67fd6eefc8c" />
 
+
+## 🧩 How to Run Locally
+
+    <img width="757" height="719" alt="Screenshot 2026-01-09 003327" src="https://github.com/user-attachments/assets/70e76258-c7b1-49d3-8b97-4b86b133acb8" />
