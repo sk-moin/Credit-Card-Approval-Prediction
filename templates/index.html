@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Credit Card Approval Prediction</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveBackground 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h2 {
+    color: #00d4ff;
+    font-size: 2em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header p {
+    color: #666;
+    font-size: 1em;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+}
+
+.form-group {
+    margin-bottom: 25px;
+    animation: slideIn 0.5s ease-out backwards;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.15s; }
+.form-group:nth-child(3) { animation-delay: 0.2s; }
+.form-group:nth-child(4) { animation-delay: 0.25s; }
+.form-group:nth-child(5) { animation-delay: 0.3s; }
+.form-group:nth-child(6) { animation-delay: 0.35s; }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+label {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+}
+
+input:hover, select:hover {
+    border-color: #b8c5f0;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 212, 255, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.result {
+    margin-top: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 10px;
+    text-align: center;
+    display: none;
+}
+
+.result.show {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.result h3 {
+    color: #333;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #667eea, transparent);
+    margin: 30px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 25px;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header h2 {
+        font-size: 1.5em;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="icon">💳</div>
+        <h2>Credit Card Approval System</h2>
+        <p>Enter your demographic and financial details to predict approval status</p>
+    </div>
+
+    <form action="/predict" method="post">
+        <div class="grid">
+            <div class="form-group">
+                <label>Gender:</label>
+                <select name="CODE_GENDER">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Own Car:</label>
+                <select name="FLAG_OWN_CAR">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label>Own Property:</label>
+                <select name="FLAG_OWN_REALTY">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Annual Income:</label>
+                <input type="number" name="AMT_INCOME_TOTAL" placeholder="e.g. 500000" required>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label>Number of Children:</label>
+                <input type="number" name="CNT_CHILDREN" placeholder="0 to 5" min="0" max="5" required>
+            </div>
+
+            <div class="form-group">
+                <label>Family Members:</label>
+                <input type="number" name="CNT_FAM_MEMBERS" placeholder="1 to 6" min="1" max="6" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Income Type:</label>
+            <select name="NAME_INCOME_TYPE">
+                <option value="Working">Working</option>
+                <option value="Commercial associate">Commercial Associate</option>
+                <option value="Pensioner">Pensioner</option>
+                <option value="State servant">State Servant</option>
+                <option value="Student">Student</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Education Level:</label>
+            <select name="NAME_EDUCATION_TYPE">
+                <option value="Secondary / secondary special">Secondary</option>
+                <option value="Higher education">Higher Education</option>
+                <option value="Incomplete higher">Incomplete Higher</option>
+                <option value="Lower secondary">Lower Secondary</option>
+                <option value="Academic degree">Academic Degree</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Family Status:</label>
+            <select name="NAME_FAMILY_STATUS">
+                <option value="Married">Married</option>
+                <option value="Single / not married">Single</option>
+                <option value="Civil marriage">Civil Marriage</option>
+                <option value="Separated">Separated</option>
+                <option value="Widow">Widow</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Housing Type:</label>
+            <select name="NAME_HOUSING_TYPE">
+                <option value="House / apartment">House / Apartment</option>
+                <option value="Rented apartment">Rented Apartment</option>
+                <option value="With parents">With Parents</option>
+                <option value="Municipal apartment">Municipal Apartment</option>
+                <option value="Co-op apartment">Co-op Apartment</option>
+            </select>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label>Years Employed:</label>
+                <input type="number" name="YEARS_EMPLOYED" placeholder="e.g. 12" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Age (Years):</label>
+                <input type="number" name="AGE_YEARS" placeholder="e.g. 32" min="18" max="100" required>
+            </div>
+        </div>
+
+        <button type="submit">Predict Approval Status</button>
+    </form>
+
+    {% if prediction_text %}
+    <div class="result show">
+        <h3>{{ prediction_text }}</h3>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Add smooth scroll to result if it exists
+window.addEventListener('DOMContentLoaded', function() {
+    const result = document.querySelector('.result.show');
+    if (result) {
+        setTimeout(() => {
+            result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
+    }
+});
+</script>
+
+</body>
+</html>
