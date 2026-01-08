@@ -38,35 +38,34 @@ credit_record.csv — historical credit repayment behavior
 
 ## 🛠 Features Used
 
+### Numerical features:
 
-* Numerical features:
-
-AMT_INCOME_TOTAL
-
-CNT_CHILDREN
-
-CNT_FAM_MEMBERS
-
-AGE_YEARS
-
-YEARS_EMPLOYED
+    AMT_INCOME_TOTAL
+    
+    CNT_CHILDREN
+    
+    CNT_FAM_MEMBERS
+    
+    AGE_YEARS
+    
+    YEARS_EMPLOYED
 
 
-* Categorical features:
+### Categorical features:
 
-CODE_GENDER
-
-FLAG_OWN_CAR
-
-FLAG_OWN_REALTY
-
-NAME_INCOME_TYPE
-
-NAME_EDUCATION_TYPE
-
-NAME_FAMILY_STATUS
-
-NAME_HOUSING_TYPE
+    CODE_GENDER
+    
+    FLAG_OWN_CAR
+    
+    FLAG_OWN_REALTY
+    
+    NAME_INCOME_TYPE
+    
+    NAME_EDUCATION_TYPE
+    
+    NAME_FAMILY_STATUS
+    
+    NAME_HOUSING_TYPE
 
 
 ## 🧪 Model Training
